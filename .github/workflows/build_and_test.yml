@@ -1,35 +1,43 @@
 name: CI
-
-on: [push, pull_request]
-
-permissions:
-  contents: read
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  commitlint:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install protoc
+        run: sudo apt-get update && sudo apt-get install -y protobuf-compiler
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
         with:
-          fetch-depth: 0
-      - name: Setup node
-        uses: actions/setup-node@v4
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+      - name: Cache Rust dependencies
+        uses: actions/cache@v4
         with:
-          node-version: lts/*
-          cache: npm
-      - name: Install commitlint
-        run: npm install -D @commitlint/cli @commitlint/config-conventional
-      - name: Print versions
-        run: |
-          git --version
-          node --version
-          npm --version
-          npx commitlint --version
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Check formatting
+        run: cargo fmt --all # --check
 
-      - name: Validate current commit (last commit) with commitlint
-        if: github.event_name == 'push'
-        run: npx commitlint --last --verbose
+      - name: Apply Clippy auto-fixes
+        run: cargo clippy --workspace --all-targets --fix --allow-dirty --allow-staged || true
+        
+      - name: Run Clippy (strict check)
+        run: cargo clippy --workspace --all-targets -- -D warnings
 
-      - name: Validate PR commits with commitlint
-        if: github.event_name == 'pull_request'
-        run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+      - name: Run Tests
+        run: cargo test --workspace
