@@ -1,0 +1,23 @@
+#+title: grindr-rs README
+
+*🏳️‍🌈🔫 The Most Approachable Social Network for the Rust Community*
+
+Welcome to *grindr-rs*, a dating app built with Rust, designed for the Rust community with love and a sprinkle of crabby charm.
+
+* Project Structure
+  #+begin_src
+  src/
+  ├── bin/            # Server entry point
+  ├── domain/         # Core: modules, entities, use cases, ports, events
+  ├── adapters/       # Inbound (gRPC) and outbound (PostgreSQL, Redis, WebSocket, Solana mock)
+  ├── infrastructure/ # External systems: EventBus, database, cache, monitoring, Solana (future)
+  ├── tests/          # Integration tests and mocks
+  └── lib.rs          # Module exports
+  #+end_src
+
+* License
+  Licensed under DBAD (Don't Be a Dick). See [[https://dbad-license.org/][DBAD License]] for details.
+
+#+begin_quote
+*Note*: This is an MVP in progress, so expect some rough edges. Solana integration is planned post-MVP for Web3 payments and potential authentication. Got questions? We're here to help—crabs don't bite (much)! 🦀
+#+end_quote
