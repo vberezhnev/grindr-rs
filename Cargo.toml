@@ -1,0 +1,16 @@
+[package]
+name = "grindr-rs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+actix = "0.13.5"
+anyhow = "1.0.98"
+redis = "0.32.4"
+reqwest = "0.12.22"
+sqlx = "0.8.6"
+sysinfo = "0.36.1"
+thiserror = "2.0.12"
+tokio = "1.47.0"
+tonic = "0.14.0"
+tracing = "0.1.41"
