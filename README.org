@@ -13,6 +13,20 @@
   └── lib.rs          # Exports
   #+end_src
 
+*Entities*:
+1. User entity
+2.
+
+*Use cases*:
+1.
+2.
+
+*Ports:*
+1. 
+2.
+
+*Adapters:*
+  
 * License
   Licensed under DBAD (Don't Be a Dick). See [[https://dbad-license.org/][DBAD License]] for details.
 
